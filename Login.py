@@ -19,6 +19,10 @@ class Server:
             client_sock,client_addr = self.network.accept()
             client_sock.send('hello'.encode())
             print(f'client {client_addr} connected')
+
+            msg=''
+            for client in Server.Clients:
+                msg=msg+''+
             time.sleep(0.1)
             client_thread = threading.Thread(target=self.wait_for_user_nickname,args=[client_sock])
             client_thread.start()
