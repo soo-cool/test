@@ -1,13 +1,13 @@
 import socket
 import time
 
-from teacher.UserDialog import UserDialog
+from user_dialog import UserDialog
 
 
 class Connection:
     def __init__(self):
-        UserDialog.getUserInputIp()
-        self.host = UserDialog._Ip
+        UserDialog.Get_User_Input_Id()
+        self.host = UserDialog._ip
         self.port = UserDialog._port
         print(self.host,self.port)
 

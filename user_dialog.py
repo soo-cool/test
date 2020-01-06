@@ -7,12 +7,19 @@ class UserDialog:
     def __init__(self):
        pass
 
+    @classmethod
+    def show_error_box(cls, msg):
+        master = Tk()
+        Label(master, text=msg).grid(row=0)
+        Button(master, text='OK', command=master.destroy).grid(row=1, pady=4)
+        master.mainloop()
+
 
     @classmethod
     def Get_User_Input_Id(cls):
 
         def Get_User_IpAndPort():
-            cls._Ip = e1.get()
+            cls._ip = e1.get()
             cls._port = int(e2.get())
             # print(cls._Ip,cls._port)
             ClientWindow.destroy()
