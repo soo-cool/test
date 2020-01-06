@@ -3,6 +3,7 @@ import threading
 import socket
 
 class Server:
+    Clients = []
     def __init__(self,host,port):
         self.host=host
         self.port=port
@@ -16,14 +17,31 @@ class Server:
     def start(self):
         while True:
             client_sock,client_addr = self.network.accept()
+            client_sock.send('hello'.encode())
             print(f'client {client_addr} connected')
             time.sleep(0.1)
-            threading.Thread(target=self.wait_for_user_nickname,args=[client_sock])
+            client_thread = threading.Thread(target=self.wait_for_user_nickname,args=[client_sock])
+            client_thread.start()
 
-    def wait_for_user_nickname(self):
-        pass
+    def wait_for_user_nickname(self,client_sock):
+        new_user_id=client_sock.recv(1024).decode('utf-8')
+        print(new_user_id)
+        client = Client(client_sock, new_user_id)
+        Server.Clients.append(client)
+        client.start()
+
+class Client:
+    def __init__(self, sock, clientID):
+        self.connexion = sock
+        self.clientID = clientID
+        self._run = True
+
+    def start(self):
+        while self._run:
+            time.sleep(0.1)
+            pass
 
 
 if __name__ == '__main__':
-    server = Server('0.0.0.0',1212)
+    server = Server('0.0.0.0',9696)
     server.start()
