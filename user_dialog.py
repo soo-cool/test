@@ -26,7 +26,7 @@ class UserDialog:
 
 
         ClientWindow = Tk()
-        Label(ClientWindow,text='请输入IP').grid(row=0)
+        Label(ClientWindow,text='请输入IP').grid(row=0,column = 1)
         Label(ClientWindow, text='IP').grid(row=1)
         Label(ClientWindow, text='Port').grid(row=2)
 

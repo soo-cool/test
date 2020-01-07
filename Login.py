@@ -4,6 +4,7 @@ import socket
 
 class Server:
     Clients = []
+    logs = {}
     def __init__(self,host,port):
         self.host=host
         self.port=port
@@ -55,10 +56,16 @@ class Server:
         new_user_id=client_sock.recv(1024).decode('utf-8')
         print(new_user_id)
         client = Client(client_sock, new_user_id)
+
+        for msgID in Server.logs.keys():
+            msg = Server.logs[msgID]
+            client_sock.sendall(msg.encode('ISO-8859-1'))
+
         Server.Clients.append(client)
         client.start()
 
 class Client:
+    msgid = 0
     def __init__(self, sock, clientID):
         self.sock = sock
         self.clientID = clientID
@@ -78,9 +85,10 @@ class Client:
 
             print(msg)
 
+            Server.logs[Client.msgid] = msg
             if msg[0] == 'D':
                 self.broadcast2Clients(msg)
-
+            Client.msgid += 1
             pass
 
     def broadcast2Clients(self,msg):
