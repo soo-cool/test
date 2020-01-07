@@ -7,11 +7,18 @@ class WhiteBoard:
               'd': 'black', 's': 'snow'}
 
     def __init__(self):
+        self.color = 'b'
         self.init_whiteboard()
         self._init_item_button()
         self._init_color_button()
         self.myWhiteBoard.mainloop()
-        self.color = 'b'
+
+    def show_window(self):
+        self.myWhiteBoard.mainloop()
+
+    def init_drawing_area(self):
+        self.drawing_area = Canvas(self.myWhiteBoard,width = 1000,height = 700,bg='white')
+        self.drawing_area.place(y=50)
 
     def init_whiteboard(self):
         self.myWhiteBoard = Tk()
@@ -43,8 +50,8 @@ class WhiteBoard:
                command=lambda: self.set_drawing_tool('eraser')).place(x=560, y=0)
         Button(self.myWhiteBoard, text='drag', height=1, width=5, bg='green', font='Arial',
                command=lambda: self.set_drawing_tool('drag')).place(x=630, y=0)
-    def _init_color_button(self):
 
+    def _init_color_button(self):
         Button(self.myWhiteBoard, height=1, width=5, bg='red',
                command=lambda: self.set_color('r')).place(x=1010,y=50)
         Button(self.myWhiteBoard, height=1, width=5, bg='orange',
