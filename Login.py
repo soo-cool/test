@@ -86,7 +86,7 @@ class Client:
             print(msg)
 
             Server.logs[Client.msgid] = msg
-            if msg[0] in ['D', 'R', 'O', 'L', 'C', 'S']:
+            if msg[0] in ['D', 'R', 'O', 'L', 'C', 'S', 'T']:
                 self.broadcast2Clients(msg)
             Client.msgid += 1
             pass
