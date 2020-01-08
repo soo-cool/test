@@ -31,6 +31,8 @@ class Client(Thread, WhiteBoard):
         self.y_pos = event.y
         self.last_time = time.time()
         self.line_x1, self.line_y1 = event.x, event.y
+        if self.isMouseDown and self.drawing_tool == 'eraser':
+            self.send_del_msg(event)
 
     def left_but_up(self,event=None):
         self.isMouseDown = False
@@ -56,6 +58,16 @@ class Client(Thread, WhiteBoard):
             msg = (cmd_type, self.line_x1, self.line_y1, self.line_x2, self.line_y2, 'red')
             self.conn.send_message(msg)
 
+    def send_del_msg(self,event):
+        canvas_item_id_tuple = self.drawing_area.find_overlapping(event.x - 2, event.y - 2, event.x + 2, event.y + 2)
+        print(canvas_item_id_tuple)
+        if len(canvas_item_id_tuple) > 0:
+            to_delete_id = max(canvas_item_id_tuple)
+            tags = self.drawing_area.gettags(to_delete_id)
+            msgid = tags[0]
+            msg = ('Z', msgid)
+            self.conn.send_message(msg)
+
     def motion(self,event=None):
         if self.isMouseDown and self.drawing_tool == 'pencil':
             now = time.time()
@@ -67,6 +79,8 @@ class Client(Thread, WhiteBoard):
             self.conn.send_message(msg)
             self.x_pos = event.x
             self.y_pos = event.y
+        elif self.isMouseDown and self.drawing_tool == 'eraser':
+            self.send_del_msg(event)
 
 
     def run(self):

@@ -65,7 +65,7 @@ class Server:
         client.start()
 
 class Client:
-    msgid = 0
+    msgid = 1
     def __init__(self, sock, clientID):
         self.sock = sock
         self.clientID = clientID
@@ -85,17 +85,29 @@ class Client:
 
             print(msg)
 
-            Server.logs[Client.msgid] = msg
-            if msg[0] in ['D', 'R', 'O', 'L', 'C', 'S', 'T']:
+            if msg[0] in ['D','R','L','O','C','S','T']:
                 self.broadcast2Clients(msg)
-            Client.msgid += 1
+            elif msg[0] in ['Z']:
+                splitmsg = msg.split()
+                self.delete_shape(msg,splitmsg)
+
+
             pass
 
+    def delete_shape(self, msg,splitmsg):
+        if int(splitmsg[1]) in Server.logs:
+            Server.logs.pop(int(splitmsg[1]))
+            msg = msg.encode('ISO-8859-1')
+            for client in Server.Clients:
+                client.sock.sendall(msg)
+
     def broadcast2Clients(self,msg):
+        msg = msg[:-1] + str(Client.msgid) + ' Ø'
+        Server.logs[Client.msgid] = msg
         msg = msg.encode('ISO-8859-1')
         for client in Server.Clients:
             client.sock.sendall(msg)
-
+        Client.msgid += 1
 
 if __name__ == '__main__':
     server = Server('0.0.0.0',1212)
