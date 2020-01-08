@@ -1,4 +1,5 @@
 from tkinter import *
+import math
 
 class WhiteBoard:
     drawing_tool = "line"
@@ -15,16 +16,55 @@ class WhiteBoard:
         self.init_drawing_area()
         # self.myWhiteBoard.mainloop()
 
-    def draw_line(self, msgLst):
+    def draw_Pencil(self, msgLst):
         startX,startY,endX,endY = int(msgLst[1]),int(msgLst[2]),int(msgLst[3]),int(msgLst[4])
         color = msgLst[5]
         self.drawing_area.create_line(startX,startY,endX,endY,fill=color,width=self.line_width)
+
+    def draw_Rectangle(self, msgLst):
+        startX,startY,endX,endY = int(msgLst[1]),int(msgLst[2]),int(msgLst[3]),int(msgLst[4])
+        color = msgLst[5]
+        self.drawing_area.create_rectangle(startX,startY,endX,endY,fill=color,width=0)
+
+    def draw_Square(self, msgLst):
+        startX,startY,endX,endY = int(msgLst[1]),int(msgLst[2]),int(msgLst[3]),int(msgLst[4])
+        color = msgLst[5]
+        Length_Side = ((endX - startX) + (endY - startY))/2
+        self.drawing_area.create_rectangle(startX, startY, startX + Length_Side, startY + Length_Side,fill=color,width=0)
+
+    def draw_Oval(self, msgLst):
+        startX,startY,endX,endY = int(msgLst[1]),int(msgLst[2]),int(msgLst[3]),int(msgLst[4])
+        color = msgLst[5]
+        self.drawing_area.create_oval(startX,startY,endX,endY,fill=color,width=0)
+
+    def draw_Line(self, msgLst):
+        startX,startY,endX,endY = int(msgLst[1]),int(msgLst[2]),int(msgLst[3]),int(msgLst[4])
+        color = msgLst[5]
+        self.drawing_area.create_line(startX,startY,endX,endY,fill=color,width=self.line_width)
+
+    def draw_Circle(self, msgLst):
+        startX,startY,endX,endY = int(msgLst[1]),int(msgLst[2]),int(msgLst[3]),int(msgLst[4])
+        X_Center = (startX + endX)/2
+        Y_Center = (startY + endY)/2
+        radius = math.sqrt((endX - startX)**2 + (endY - startY)**2) / 2
+        color = msgLst[5]
+        self.drawing_area.create_oval(X_Center - radius,Y_Center - radius,X_Center + radius,Y_Center + radius,fill=color,width=0)
 
     def draw_from_msg(self,msg):
         msgLst = msg.split()
         draw_type = msgLst[0]
         if draw_type == 'D':
-            self.draw_line(msgLst)
+            self.draw_Pencil(msgLst)
+        elif draw_type == 'R':
+            self.draw_Rectangle(msgLst)
+        elif draw_type == 'O':
+            self.draw_Oval(msgLst)
+        elif draw_type == 'L':
+            self.draw_Line(msgLst)
+        elif draw_type == 'C':
+            self.draw_Circle(msgLst)
+        elif draw_type == 'S':
+            self.draw_Square(msgLst)
         else:
             pass
     def show_window(self):

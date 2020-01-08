@@ -78,7 +78,7 @@ class Client:
         while self._run:
             msg = ''
             while True:
-                data =  self.sock.recv(1).decode('ISO-8859-1')
+                data = self.sock.recv(1).decode('ISO-8859-1')
                 msg += data
                 if data == 'Ø':
                     break
@@ -86,7 +86,7 @@ class Client:
             print(msg)
 
             Server.logs[Client.msgid] = msg
-            if msg[0] == 'D':
+            if msg[0] in ['D', 'R', 'O', 'L', 'C', 'S']:
                 self.broadcast2Clients(msg)
             Client.msgid += 1
             pass
